@@ -61,9 +61,9 @@ def parse_arguments():
 def define_scenarios():
     """Define scenarios for sensitivity analysis."""
     return [
-        {'nome': 'Scenario 1', 'parametri': {'average_opaque_surface_transmittance': 0.5, 
+        {'nome': 'Scenario 1', 'parameters': {'average_opaque_surface_transmittance': 0.5, 
                                             'average_glazed_surface_transmittance': 1}},
-        {'nome': 'Scenario 2', 'parametri': {'average_opaque_surface_transmittance': 0.2, 
+        {'nome': 'Scenario 2', 'parameters': {'average_opaque_surface_transmittance': 0.2, 
                                             'average_glazed_surface_transmittance': 0.7}}
     ]
 
