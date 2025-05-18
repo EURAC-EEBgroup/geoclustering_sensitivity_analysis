@@ -95,7 +95,7 @@ For any question or support, please contact:
 This work was carried out within European projects: 
 
 <p align="center">
-  <img src="geoclustering_sensitivity_analysis/assets/moderate_logo.png" alt="moderate" style="width: 100%;">
+  <img src="geoclustering_sensitivity_analysis/assets/img/moderate_logo.png" alt="moderate" style="width: 100%;">
 </p>
 
 Moderate - Horizon Europe research and innovation programme under grant agreement No 101069834, with the aim of contributing to the development of open products useful for defining plausible scenarios for the decarbonization of the built environment

@@ -17,7 +17,7 @@ import joblib
 warnings.filterwarnings('ignore')
 
 class PredictiveModel:
-    def __init__(self, file_path=None, target_column=None, problem_type='classificazione'):
+    def __init__(self, file_path=None, target_column=None, problem_type='classification'):
         
         """
         
@@ -206,7 +206,7 @@ class PredictiveModel:
             self.preprocess_dati()
             
         # Define models based on the problem type
-        if self.problem_type == 'classificazione':
+        if self.problem_type == 'classification':
             models = {
                 'RandomForest': RandomForestClassifier(random_state=42),
                 'XGBoost': xgb.XGBClassifier(random_state=42),
@@ -225,7 +225,7 @@ class PredictiveModel:
             model.fit(self.X_train_processed, self.y_train)
             
             # Cross-validation evaluation
-            if self.problem_type == 'classificazione':
+            if self.problem_type == 'classification':
                 cv_scores = cross_val_score(model, self.X_train_processed, self.y_train, cv=5, scoring='accuracy')
                 print(f"Accuracy in cross-validation: {cv_scores.mean():.4f} ± {cv_scores.std():.4f}")
             else:
@@ -239,7 +239,7 @@ class PredictiveModel:
             y_pred = model.predict(self.X_test_processed)
             
             # Performance evaluation
-            if self.problem_type == 'classificazione':
+            if self.problem_type == 'classification':
                 accuracy = accuracy_score(self.y_test, y_pred)
                 print(f"Accuracy sul test set: {accuracy:.4f}")
                 
@@ -321,7 +321,7 @@ class PredictiveModel:
                     'learning_rate': [0.01, 0.1, 0.2]
                 }
         elif model_name == 'LightGBM':
-            if self.problem_type == 'classificazione':
+            if self.problem_type == 'classification':
                 model = lgb.LGBMClassifier(random_state=42)
                 param_grid = {
                     'n_estimators': [50, 100, 200],
@@ -506,9 +506,9 @@ class PredictiveModel:
             'target_column': self.target_column,
             'feature_columns': list(self.X_train.columns),
             'performance': {
-                'metric': 'accuracy' if self.problem_type == 'classificazione' else 'rmse',
+                'metric': 'accuracy' if self.problem_type == 'classification' else 'rmse',
                 'value': float(self.best_score),
-                'metric2': 'accuracy' if self.problem_type == 'classificazione' else 'r2',
+                'metric2': 'accuracy' if self.problem_type == 'classification' else 'r2',
                 'value2': float(self.best_score_r2)
             },
             'created_at': pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -592,7 +592,7 @@ class PredictiveModel:
         result = {'predictions': predictions}
         
         # For classification problems, also offer probabilities if the model supports it
-        if self.problem_type == 'classificazione' and hasattr(model, 'predict_proba'):
+        if self.problem_type == 'classification' and hasattr(model, 'predict_proba'):
             probabilities = model.predict_proba(dati_processati)
             result['probabilities'] = probabilities
         
@@ -725,7 +725,7 @@ class PredictiveModel:
         
         # If we have the real target, calculate the metrics
         if y_nuovo is not None:
-            if self.problem_type == 'classificazione':
+            if self.problem_type == 'classification':
                 accuracy = accuracy_score(y_nuovo, result_df['predizione'])
                 print(f"Accuracy sul nuovo dataset: {accuracy:.4f}")
                 
@@ -1049,7 +1049,7 @@ class PredictiveModel:
             # Multidimensional case - here we perform a one-at-a-time analysis
             results = []
             
-            for param in parametri_variabili:
+            for param in sensitivity_vars:
                 print(f"\nSensitivity analysis for {param}:")
                 
                 for val in tqdm(ranges[param], desc=f"Variation of {param}"):
@@ -1070,7 +1070,7 @@ class PredictiveModel:
                     ci_upper = pred_result.get('ci_upper', [None])[0]
                     
                     result_record = {'variated_parameter': param}
-                    result_record.update({p: base_point[p] for p in parametri_variabili})
+                    result_record.update({p: base_point[p] for p in sensitivity_vars})
                     result_record[param] = val
                     result_record['prediction'] = prediction
                     result_record['prediction_min'] = ci_lower
@@ -1115,7 +1115,7 @@ class PredictiveModel:
             # Create a summary table of sensitivity
             sensitivity_summary = []
             
-            for param in parametri_variabili:
+            for param in sensitivity_vars:
                 param_results = pd.DataFrame([r for r in results if r['variated_parameter'] == param])
                 param_range = param_results[param].max() - param_results[param].min()
                 pred_range = param_results['prediction'].max() - param_results['prediction'].min()
@@ -1147,14 +1147,14 @@ class PredictiveModel:
         
         return results_df
     
-    def optimize_cluster_parameters(self, cluster_df, parametri_variabili, target, objective='min',
+    def optimize_cluster_parameters(self, cluster_df, sensitivity_vars, target, objective='min',
                              modello=None, vincoli=None, n_trials=100, verbose=True):
         """
         Optimizes the parameters within a cluster to maximize or minimize a target.
         
         Args:
             cluster_df: DataFrame containing the cluster data to be analyzed
-            parametri_variabili: List of parameters to optimize
+            sensitivity_vars: List of parameters to optimize
             target: Name of the target column to optimize
             objective: 'min' to minimize the target, 'max' to maximize it
             modello: Model pre-trained to use (if None, uses self.best_model)
@@ -1187,7 +1187,7 @@ class PredictiveModel:
         # Determine the ranges for the parameters to optimize
         if vincoli is None:
             vincoli = {}
-            for param in parametri_variabili:
+            for param in sensitivity_vars:
                 if param not in X_base.columns:
                     raise ValueError(f"The parameter '{param}' is not present in the DataFrame")
                 
@@ -1208,7 +1208,7 @@ class PredictiveModel:
             # test_point = X_processed.mean().to_dict()
             
             # Suggest values for each parameter
-            for param in parametri_variabili:
+            for param in sensitivity_vars:
                 min_val, max_val = vincoli[param]
                 test_point[param] = trial.suggest_float(param, min_val, max_val)
             
