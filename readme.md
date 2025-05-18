@@ -78,10 +78,13 @@ models_dir: Directory to save models (default: models)
 results_dir: Directory to save results (default: results)
 
 # Example
-![Description of the image](assets/img/fig_1.png)
-![Description of the image](assets/img/fig_2.png)
-
-
+![cluster selection using Elbow method](assets/img/fig_1.png)
+![Distribution of target variables](assets/img/fig_2.png)
+![3D response surface of selected parameters to the target](assets/img/3D.png)
+![Heat map of selected paramters effect to the target](assets/img/scenario_1.png)
+![Predicted values vs actual values](assets/img/predicted_vs_actual.png)
+![Top 20 features](assets/img/top_20_features.png)
+![Saving achieved from each scenario](assets/img/scenario_3.png)
 
 # License
 Free software: MIT license
