@@ -128,7 +128,8 @@ def main():
                 file_path_save_model=file_path_save_model,
                 confronta_scenari_cluster=args.compare_scenarios,
                 scenari=scenarios,
-                path_save_result=f"{args.results_dir}/{cluster_name}"
+                path_save_result=f"{args.results_dir}/{cluster_name}",
+                cluster_name=cluster_name
             )
             
             results[cluster_name] = {
