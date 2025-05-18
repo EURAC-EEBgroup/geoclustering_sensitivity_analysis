@@ -78,8 +78,8 @@ models_dir: Directory to save models (default: models)
 results_dir: Directory to save results (default: results)
 
 # Example
-![Description of the image](assets/fig_1.png)
-![Description of the image](assets/fig_2.png)
+![Description of the image](assets/img/fig_1.png)
+![Description of the image](assets/img/fig_2.png)
 
 
 
