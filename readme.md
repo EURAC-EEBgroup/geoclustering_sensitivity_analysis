@@ -50,12 +50,8 @@ The best models are selected based on the following metrics:
 
 ## Sensitivity Analysis
 The script then conducts a sensitivity analysis on the clusters to understand how the clusters change with different parameters.
-The sensitivity analysis is conducted using the following methods:
-- Scenario Analysis
-- What-if Analysis
-- Counterfactual Analysis
-- Robustness Analysis
-- Scenario Analysis
+The sensitivity analysis is conducted using the Scenario Analysis method.
+
 
 The results of the sensitivity analysis are saved in the directory specified by the `results_dir` parameter.
 
@@ -66,16 +62,16 @@ The models are saved in the directory specified by the `models_dir` parameter.
 The results of the sensitivity analysis are saved in the directory specified by the `results_dir` parameter.
 
 # Parameters
-data_path: Path to the input CSV data file to be loaded as dataframe
-columns_selected: Columns to use for clustering
-cluster_method_custom: Use custom cluster value instead of statistical method (elbow, silhouette, etc.)
-cluster_value: Number of clusters when using custom method
-cluster_method_stat: Statistical method for determining cluster count (elbow, silhouette, etc.)
-columns_to_delete: Columns to delete from the dataset
-save_clusters: Whether to save cluster datasets
-clusters_output_dir: Directory to save cluster datasets (default: data/data_cluster)
-models_dir: Directory to save models (default: models)
-results_dir: Directory to save results (default: results)
+- data_path: Path to the input CSV data file to be loaded as dataframe
+- columns_selected: Columns to use for clustering
+- cluster_method_custom: Use custom cluster value instead of statistical method (elbow, silhouette, etc.)
+- cluster_value: Number of clusters when using custom method
+- cluster_method_stat: Statistical method for determining cluster count (elbow, silhouette, etc.)
+- columns_to_delete: Columns to delete from the dataset
+- save_clusters: Whether to save cluster datasets
+- clusters_output_dir: Directory to save cluster datasets (default: data/data_cluster)
+- models_dir: Directory to save models (default: models)
+- results_dir: Directory to save results (default: results)
 
 # Example
 ![cluster selection using Elbow method](assets/img/fig_1.png)
