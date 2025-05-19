@@ -52,14 +52,13 @@ The best models are selected based on the following metrics:
 The script then conducts a sensitivity analysis on the clusters to understand how the clusters change with different parameters.
 The sensitivity analysis is conducted using the Scenario Analysis method.
 
-
 The results of the sensitivity analysis are saved in the directory specified by the `results_dir` parameter.
+
+## Optimize Cluster Parameters
+The function optimize_cluster_parameters serve for optimizing the sensitive parameters within a cluster of data, with the objective of maximizing or minimizing a predicted target (e.g. the output of a model). It uses Optuna to automatically search for the best combination of values.
 
 ## Models
 The models are saved in the directory specified by the `models_dir` parameter.
-- Scenario Analysis
-
-The results of the sensitivity analysis are saved in the directory specified by the `results_dir` parameter.
 
 # Parameters
 - data_path: Path to the input CSV data file to be loaded as dataframe

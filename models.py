@@ -878,11 +878,6 @@ class PredictiveModel:
             min_val = X_base[param].min()
             max_val = X_base[param].max()
             
-            # Espandi leggermente il range per vedere l'effetto potenziale oltre i limiti del cluster
-            range_size = max_val - min_val
-            # min_val = max(min_val - range_size * 0.1, 0 if X_base[param].min() >= 0 else min_val * 1.1)
-            # max_val = max_val + range_size * 0.1
-            
             ranges[param] = np.linspace(min_val, max_val, n_punti)
             print(f"Range for {param}: {min_val:.4f} - {max_val:.4f}")
         
@@ -1499,7 +1494,8 @@ def run_model(
     file_path_save_model,
     confronta_scenari_cluster,
     scenari,
-    path_save_result):
+    path_save_result,
+    cluster_name):
 
     modello = PredictiveModel(file_path=file_path_cluster, target_column=target_, problem_type=problem_type_)
     _,_,_,predictions_df,results_analisi_sensibilita,df_confronto_scenari = modello.pipeline(
