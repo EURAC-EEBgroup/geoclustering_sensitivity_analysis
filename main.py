@@ -11,27 +11,31 @@ import argparse
 import pandas as pd
 import numpy as np
 from tqdm.auto import tqdm
-from analysis_clustering import generate_dataset_cluster
-from models import run_model
+from utils.analysis_clustering import generate_dataset_cluster
+from utils.models import run_model
 
 
-def parse_arguments():
-    """Parse command line arguments."""
-    parser = argparse.ArgumentParser(description='Run clustering and sensitivity analysis')
+def parse_arguments(custom_args=None):
+    """Parse command line arguments.
+    
+    Args:
+        custom_args: Optional list of arguments to parse. If None, uses sys.argv
+    """
+    parser = argparse.ArgumentParser(description='Run clustering and sensitivity analysis of buildings')
     
     # Clustering parameters
     parser.add_argument('--data_path', type=str, default="data/clustering.csv",
                       help='Path to input CSV data file')
     parser.add_argument('--columns_selected', nargs='+', default=['QHnd', 'degree_days'],
                       help='Columns to use for clustering')
-    parser.add_argument('--cluster_method_custom', action='store_true',
+    parser.add_argument('--cluster_method_custom', action='store_true', default=False,
                       help='Use custom cluster method instead of statistical method')
     parser.add_argument('--cluster_value', type=int, default=2,
                       help='Number of clusters when using custom method')
     parser.add_argument('--cluster_method_stat', type=str, default="elbow",
                       help='Statistical method for determining cluster count (elbow, silhouette, etc.)')
     parser.add_argument('--columns_to_delete', nargs='+', 
-                      default=["EPgl","EPl", "EPt", "EPc", "EPv", "EPw", "EPh", "QHimp", "theoric_nominal_power"],
+                      default=["QHnd","EPl", "EPt", "EPc", "EPv", "EPw", "EPh", "QHimp", "theoric_nominal_power"],
                       help='Columns to remove from analysis')
     parser.add_argument('--save_clusters', action='store_true', default=True,
                       help='Whether to save cluster datasets')
@@ -55,17 +59,11 @@ def parse_arguments():
     parser.add_argument('--cluster_to_analyze', type=str, default=None,
                       help='Specific cluster to analyze (default: analyze all clusters)')
     
-    return parser.parse_args()
+    if custom_args:
+        return parser.parse_args(custom_args)
+    else:
+        return parser.parse_args()
 
-
-def define_scenarios():
-    """Define scenarios for sensitivity analysis."""
-    return [
-        {'name': 'Scenario 1', 'parameters': {'average_opaque_surface_transmittance': 0.5, 
-                                            'average_glazed_surface_transmittance': 1}},
-        {'name': 'Scenario 2', 'parameters': {'average_opaque_surface_transmittance': 0.2, 
-                                            'average_glazed_surface_transmittance': 0.7}}
-    ]
 
 
 def ensure_directories_exist(dirs):
@@ -74,16 +72,16 @@ def ensure_directories_exist(dirs):
         os.makedirs(directory, exist_ok=True)
 
 
-def main():
+def main(custom_args=None, list_dict_scenarios=None):
     """Main execution function."""
     # Parse command line arguments
-    args = parse_arguments()
+    args = parse_arguments(custom_args)
     
     # Create necessary directories
     ensure_directories_exist([args.clusters_output_dir, args.models_dir, args.results_dir])
     
     # Define scenarios for sensitivity analysis
-    scenarios = define_scenarios()
+    scenarios = list_dict_scenarios
     
     print("Loading dataset...")
     df = pd.read_csv(args.data_path, sep=",", decimal=".", low_memory=False, header=0, index_col=0)
@@ -147,4 +145,16 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # custom_args = [
+    #     '--cluster_value', '5',
+    #     '--columns_selected', 'EPgl', 'degree_days',
+    #     '--target', 'EPgl',
+    #     '--problem_type', 'regression',
+    # ]
+    # list_dict_scenarios = [
+    #     {'name': 'Scenario 1', 'parameters': {'average_opaque_surface_transmittance': 0.5, 
+    #                                         'average_glazed_surface_transmittance': 1}},
+    #     {'name': 'Scenario 2', 'parameters': {'average_opaque_surface_transmittance': 0.2, 
+    #                                         'average_glazed_surface_transmittance': 0.7}}
+    # ]
+    main(custom_args=None, list_dict_scenarios=None)
